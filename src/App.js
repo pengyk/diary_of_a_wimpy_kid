@@ -1,25 +1,13 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import {
-  Modal,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  List,
-  Menu,
-  Responsive,
-  Segment,
-  Sidebar,
-  Visibility,
-  Form,
-  TextArea
-} from "semantic-ui-react";
-import "./App.css";
-import firebase from "./firebase";
+
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import {Modal,
+  Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility,
+  Form, TextArea
+} from 'semantic-ui-react'
+import "./App.css"
+import firebase from "./firebase"
+import tempImg from "./img_avatar.png"
 
 // size may also be a plain string using the presets 'large' or 'compact'
 const size = {
@@ -116,11 +104,10 @@ class DesktopContainer extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item position="right">
-                  <Menu.Item a href="#newEntry">
-                    New Entry
-                  </Menu.Item>
-                  <Menu.Item as="a">Logs</Menu.Item>
+                <Menu.Item position='right'>
+                  <Menu.Item a href="#newEntry">New Entry</Menu.Item>
+                  <Menu.Item a href="#logs">Logs</Menu.Item>
+
                 </Menu.Item>
               </Container>
             </Menu>
@@ -185,7 +172,11 @@ class MobileContainer extends Component {
                 <Menu.Item position="right" a href="#newEntry">
                   New Entry
                 </Menu.Item>
-                <Menu.Item>Logs</Menu.Item>
+
+                <Menu.Item a href="#logs">
+                  Logs
+                </Menu.Item>
+
               </Menu>
             </Container>
             <HomepageHeading mobile />
@@ -218,10 +209,10 @@ class App extends Component {
     super();
     this.state = {
       time: new Date().toLocaleString(),
-      text: "",
-      time: "",
-      items: []
-    };
+      text: '',
+      items: [],
+    }
+
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -308,14 +299,12 @@ class App extends Component {
               />
             </Form>
           </div>
-          {/* <SpotifyPlayer
-        uri="spotify:album:1TIUsv8qmYLpBEhvmBmyBk"
-        size={size}
-        view={view}
-        theme={theme}
-      /> */}
-          <Grid container stackable verticalAlign="middle">
-            <Grid.Row></Grid.Row>
+          
+          <Grid container stackable verticalAlign='middle'>
+            <Grid.Row>
+
+            </Grid.Row>
+
             <Grid.Row>
               <Grid.Column textAlign="center">
                 <Button size="huge" onClick={this.handleSubmit}>
@@ -326,16 +315,21 @@ class App extends Component {
           </Grid>
         </Segment>
 
-        <Segment style={{ padding: "0em" }} vertical>
-          <Grid celled="internally" columns="equal" stackable>
-            <Grid.Row textAlign="center">
-              <Grid.Column style={{ paddingBottom: "5em", paddingTop: "5em" }}>
+
+        <Segment style={{ padding: '0em' }} vertical id = "logs">
+          <Grid celled='internally' columns='equal' stackable>
+            <Grid.Row textAlign='center'>
+              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+
                 <List>
                   {this.state.items.map(item => {
                     return (
                       <List.Item key={item.id}>
-                        <h3>{item.time}</h3>
-                        <p>Mood found: {item.text}</p>
+                        <Image avatar src = {tempImg} />
+                        <List.Content>
+                        <List.Header>{item.time}</List.Header>
+                        <List.Description>Mood found: {item.text}</List.Description>
+                        <br/>
                         <Modal trigger={<Button>Show details</Button>}>
                           <Modal.Header>
                             Entry date and time: {item.time}
@@ -358,9 +352,11 @@ class App extends Component {
                             </Button>
                           </Modal.Actions>
                         </Modal>
-                        <Button onClick={() => this.removeItem(item.id)}>
-                          Remove Item
-                        </Button>
+
+                        <Button onClick={() => this.removeItem(item.id)}>Remove Item</Button>
+                        </List.Content>
+                        <br/>
+
                       </List.Item>
                     );
                   })}
@@ -370,46 +366,8 @@ class App extends Component {
           </Grid>
         </Segment>
 
-        <Segment style={{ padding: "8em 0em" }} vertical>
-          <Container text>
-            <Header as="h3" style={{ fontSize: "2em" }}>
-              Breaking The Grid, Grabs Your Attention
-            </Header>
-            <p style={{ fontSize: "1.33em" }}>
-              Instead of focusing on content creation and hard work, we have
-              learned how to master the art of doing nothing by providing
-              massive amounts of whitespace and generic content that can seem
-              massive, monolithic and worth your attention.
-            </p>
-            <Button as="a" size="large">
-              Read More
-            </Button>
+        <Segment inverted vertical style={{ padding: '5em 0em' }}>
 
-            <Divider
-              as="h4"
-              className="header"
-              horizontal
-              style={{ margin: "3em 0em", textTransform: "uppercase" }}
-            >
-              <a href="#">Case Studies</a>
-            </Divider>
-
-            <Header as="h3" style={{ fontSize: "2em" }}>
-              Did We Tell You About Our Bananas?
-            </Header>
-            <p style={{ fontSize: "1.33em" }}>
-              Yes I know you probably disregarded the earlier boasts as
-              non-sequitur filler content, but it's really true. It took years
-              of gene splicing and combinatory DNA research, but our bananas can
-              really dance.
-            </p>
-            <Button as="a" size="large">
-              I'm Still Quite Interested
-            </Button>
-          </Container>
-        </Segment>
-
-        <Segment inverted vertical style={{ padding: "5em 0em" }}>
           <Container>
             <Grid divided inverted stackable>
               <Grid.Row>
