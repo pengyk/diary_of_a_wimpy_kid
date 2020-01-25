@@ -383,6 +383,7 @@ class App extends Component {
                     <List.Item as='a'>Hong Kun, Tian</List.Item>
                     <List.Item as='a'>Jia Rong, Shao</List.Item>
                     <List.Item as='a'>Yun Kai, Peng</List.Item>
+                    <List.Item as='a'>Made w/ ❤️at ConUHacks V</List.Item>
                   </List>
                 </Grid.Column>
               </Grid.Row>
