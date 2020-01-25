@@ -29,28 +29,17 @@ const getWidth = () => {
  */
 const HomepageHeading = ({ mobile }) => (
   <Container text>
-    
-    <div className="logo-container" style={{
-          fontSize: mobile ? '3em' : '8em',
-          fontWeight: 'normal',
-          // marginBottom: 0,
-          marginTop: '1.5em'
-        }}>
-      <Grid.Column floated='left' width={6}>
-        <Image bordered rounded size='medium' src='/mindbook-logo-flat.png' />
-      </Grid.Column>
-      <Header
-        as='h1'
-        content='MindBook'
-        inverted
-        // style={{
-        //   fontSize: mobile ? '2em' : '4em',
-        //   fontWeight: 'normal',
-        //   marginBottom: 0,
-        //   marginTop: mobile ? '1.5em' : '3em',
-        // }}
-      />
-    </div>
+    <Header
+      as='h1'
+      content='Write 2 Heal'
+      inverted
+      style={{
+        fontSize: mobile ? '2em' : '4em',
+        fontWeight: 'normal',
+        marginBottom: 0,
+        marginTop: mobile ? '1.5em' : '3em',
+      }}
+    />
     <Header
       as='h2'
       content='Let your words speak for you.'
@@ -394,7 +383,6 @@ class App extends Component {
                     <List.Item as='a'>Hong Kun, Tian</List.Item>
                     <List.Item as='a'>Jia Rong, Shao</List.Item>
                     <List.Item as='a'>Yun Kai, Peng</List.Item>
-                    <List.Item as='a'>Made with ❤️at ConUHacks V</List.Item>
                   </List>
                 </Grid.Column>
               </Grid.Row>
