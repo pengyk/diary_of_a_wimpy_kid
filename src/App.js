@@ -6,6 +6,7 @@ import {Modal,
 } from 'semantic-ui-react'
 import "./App.css"
 import firebase from "./firebase"
+import exempleImg from "./img_avatar.png"
 
 // size may also be a plain string using the presets 'large' or 'compact'
 const size = {
@@ -109,7 +110,7 @@ class DesktopContainer extends Component {
               <Container>
                 <Menu.Item position='right'>
                   <Menu.Item a href="#newEntry">New Entry</Menu.Item>
-                  <Menu.Item as='a'>Logs</Menu.Item>
+                  <Menu.Item a href = "#logs">Logs</Menu.Item>
                 </Menu.Item>
               </Container>
             </Menu>
@@ -174,7 +175,7 @@ class MobileContainer extends Component {
                 <Menu.Item position='right' a href="#newEntry">
                   New Entry
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item a href = "#logs">
                   Logs
                 </Menu.Item>
               </Menu>
@@ -309,7 +310,7 @@ class App extends Component {
           </Grid>
         </Segment>
 
-        <Segment style={{ padding: '0em' }} vertical>
+        <Segment style={{ padding: '0em' }} vertical id = "logs">
           <Grid celled='internally' columns='equal' stackable>
             <Grid.Row textAlign='center'>
               <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
@@ -317,7 +318,9 @@ class App extends Component {
                   {this.state.items.map((item) => {
                     return (
                       <List.Item key={item.id}>
-                        <h3>{item.time}</h3>
+                        <Image avatar src = {exempleImg}/>
+                        <List.Content>
+                        <List.Header>{item.time}</List.Header>
                         <p>Mood found: {item.text}</p>
                         <Modal trigger={<Button>Show details</Button>}>
                           <Modal.Header>Entry date and time: {item.time}</Modal.Header>
@@ -338,6 +341,7 @@ class App extends Component {
                           </Modal.Actions>
                         </Modal>
                         <Button onClick={() => this.removeItem(item.id)}>Remove Item</Button>
+                        </List.Content>
                       </List.Item>
                     )
                   })}
