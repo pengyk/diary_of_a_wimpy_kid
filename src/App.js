@@ -7,6 +7,8 @@ import {Modal,
 import "./App.css"
 import firebase from "./firebase"
 
+const uuidv1 = require('uuid/v1');
+
 // size may also be a plain string using the presets 'large' or 'compact'
 const size = {
   width: '100%',
@@ -197,10 +199,12 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      uuid: '',
       time: new Date().toLocaleString(),
       text: '',
       time: '',
       items: [],
+      moods: [{score: 0.0, tone_name:""}]
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -249,15 +253,21 @@ class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const itemsRef = firebase.database().ref('items');
+    
     const item = {
+      uuid: this.state.uuid,
       time: this.state.time,
       text: this.state.text,
+      moods: this.state.moods
     }
     itemsRef.push(item);
     this.setState({
+      uuid: uuidv1(),
       text: "",
       time: new Date().toLocaleString(),
     });
+    fetch(`/api/greeting?uuid=${encodeURIComponent(this.state.uuid)}&text=${encodeURIComponent(this.state.text)}`)
+      .then(response => console.log(response)); //response.json()
   }
 
   removeItem(itemId) {
