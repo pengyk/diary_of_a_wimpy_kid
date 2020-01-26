@@ -38,7 +38,7 @@
 }
 
 .paddingText{
-  padding: 100px;
+  padding: 100px 100px 30px 100px;
 }
 
 .logo-container {
@@ -48,3 +48,23 @@
   align-items: center;
   margin-bottom: 100px;
 }
+
+.modal-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.music-player-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .entry-container {
+  border: lightslategrey;
+  border-radius: 2px;
+  margin: 5px;
+} */
