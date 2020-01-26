@@ -1,23 +1,39 @@
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import {
+  Modal,
+  Button,
+  Container,
+  Grid,
+  Header,
+  Icon,
+  Image,
+  List,
+  Menu,
+  Responsive,
+  Segment,
+  Sidebar,
+  Visibility,
+  Form,
+  TextArea,
+  Loader
+} from "semantic-ui-react";
+import "./App.css";
+import firebase from "./firebase";
+import tempImg from "./img_avatar.png";
+import SpotifyPlayer from "react-spotify-player";
 
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
-import {Modal,
-  Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility,
-  Form, TextArea
-} from 'semantic-ui-react'
-import "./App.css"
-import firebase from "./firebase"
-import tempImg from "./img_avatar.png"
+const uuidv1 = require("uuid/v1");
 
-const uuidv1 = require('uuid/v1');
+const size = {
+  width: "60%",
+  height: 250
+};
+
+const view = "list";
+const theme = "white";
 
 // size may also be a plain string using the presets 'large' or 'compact'
-const size = {
-  width: "100%",
-  height: 300
-};
-const view = "list"; // or 'coverart'
-const theme = "black"; // or 'white'
 // Heads up!
 // We using React Static to prerender our docs with server side rendering, this is a quite simple solution.
 // For more advanced usage please check Responsive docs under the "Usage" section.
@@ -26,6 +42,8 @@ const getWidth = () => {
 
   return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth;
 };
+
+ 
 
 /* eslint-disable react/no-multi-comp */
 /* Heads up! HomepageHeading uses inline styling, however it's not the best practice. Use CSS or styled components for
@@ -52,7 +70,7 @@ const HomepageHeading = ({ mobile }) => (
     </div>
     <Header
       as="h2"
-      content="Let your words speak for you."
+      content="Let your words speak for you"
       inverted
       style={{
         fontSize: mobile ? "1.5em" : "1.7em",
@@ -106,10 +124,13 @@ class DesktopContainer extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item position='right'>
-                  <Menu.Item a href="#newEntry">New Entry</Menu.Item>
-                  <Menu.Item a href="#logs">Logs</Menu.Item>
-
+                <Menu.Item position="right">
+                  <Menu.Item a href="#newEntry">
+                    New Entry
+                  </Menu.Item>
+                  <Menu.Item a href="#logs">
+                    Logs
+                  </Menu.Item>
                 </Menu.Item>
               </Container>
             </Menu>
@@ -178,7 +199,6 @@ class MobileContainer extends Component {
                 <Menu.Item a href="#logs">
                   Logs
                 </Menu.Item>
-
               </Menu>
             </Container>
             <HomepageHeading mobile />
@@ -210,14 +230,39 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      uuid: '',
+      uuid: "",
       time: new Date().toLocaleString(),
-      text: '',
+      text: "",
       items: [],
-      moods: [{score: 0.0, tone_name:"Unknown"}]
-    }
+      moods: "",
+      prevUuid: "",
+      modalDisplay: false,
+      loading: false
+    };
 
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  getTime = () => {
+    var today = new Date();
+    var date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + " " + time;
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.loading) {
+      setTimeout(()=>{
+        this.setState({loading: false})
+      },3000)
+    }
+
   }
 
   componentDidMount() {
@@ -241,7 +286,8 @@ class App extends Component {
         newState.push({
           id: item,
           time: items[item].time,
-          text: items[item].text
+          text: items[item].text,
+          moods: items[item].moods
         });
       }
       this.setState({
@@ -269,10 +315,107 @@ class App extends Component {
     console.log("var" + dateTime);
   };
 
+  musicPlayer = mood => {
+    switch (mood) {
+      case "Joy":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DXdPec7aLTmlC"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Fear":
+        return (
+          <SpotifyPlayer
+            uri="spotify:album:2dqn5yOQWdyGwOpOIi9O4x"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Anger":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DX4WYpdgoIcn6"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Sadness":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DX7qK8ma5wgG1"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Analytical":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DWWEJlAGA9gs0"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Confident":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DX1tyCD9QhIWF"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+      case "Tentative":
+        return (
+          <SpotifyPlayer
+            uri="spotify:playlist:37i9dQZF1DX1gRalH1mWrP"
+            size={size}
+            view={view}
+            theme={theme}
+          />
+        );
+    }
+  };
+
+  switchColors = mood => {
+    switch (mood) {
+      case "Anger" :
+        return(
+      <Image avatar style = {{backgroundColor: "red"}}/>);
+      case "Fear" :
+        return(
+      <Image avatar style = {{backgroundColor: "black"}}/>);
+      case "Joy" :
+        return(
+      <Image avatar style = {{backgroundColor: "yellow"}}/>);
+      case "Sadness" :
+        return(
+      <Image avatar style = {{backgroundColor: "blue"}}/>);
+      case "Tentative" :
+        return(
+      <Image avatar style = {{backgroundColor: "purple"}}/>);
+      case "Confident" :
+        return(
+      <Image avatar style = {{backgroundColor: "green"}}/>);
+      case "Analytical" :
+        return(
+      <Image avatar style = {{backgroundColor: "orange"}}/>);
+      default:
+        return(
+          <Image avatar style = {{backgroundColor: "white", border: "white", borderSize: "5px"}}/>);
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
-    const itemsRef = firebase.database().ref('items');
-    
+    const itemsRef = firebase.database().ref("items");
+
     const item = {
       uuid: this.state.uuid,
       time: this.state.time,
@@ -280,15 +423,32 @@ class App extends Component {
       moods: this.state.moods
     };
     itemsRef.push(item);
-    fetch(`/api/greeting?uuid=${encodeURIComponent(this.state.uuid)}&text=${encodeURIComponent(this.state.text)}`)
-      .then(response => console.log(response)); //response.json()
+    fetch(
+      `/api/greeting?uuid=${encodeURIComponent(
+        this.state.uuid
+      )}&text=${encodeURIComponent(this.state.text)}`
+    ).then(response => console.log(response)); //response.json()
     this.setState({
+      prevUuid: this.state.uuid,
       uuid: uuidv1(),
       text: "",
       time: new Date().toLocaleString()
     });
-    
-  }
+    this.setState({
+      loading: true
+    })
+    // this.popUp();
+  };
+
+  // popUp = () => {
+  //   if(this.state.items.find(item => item.uuid === this.state.prevUuid){
+  //     return(
+  //       <div>
+
+  //       </div>
+  //     )
+  //   }
+  // }
 
   removeItem(itemId) {
     const itemRef = firebase.database().ref(`/items/${itemId}`);
@@ -298,77 +458,91 @@ class App extends Component {
   render() {
     return (
       <ResponsiveContainer>
-        <Segment style={{ padding: "8em 0em" }} vertical id="newEntry">
-          <div className="paddingText">
-            <Form>
-              <TextArea
-                rows={16}
-                placeholder="Spill your heart..."
-                style={{ minHeight: 200 }}
-                value={this.state.text}
-                onChange={this.handleChange}
-              />
-            </Form>
-          </div>
-          
-          <Grid container stackable verticalAlign='middle'>
-            <Grid.Row>
+        <Segment style={{ padding: "8em 0em 3em 0em" }} vertical id="newEntry">
 
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column textAlign="center">
-                <Button size="huge" onClick={this.handleSubmit}>
-                  Submit daily entry
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          {/* <Dimmer active={this.state.loading}> */}
+            <Loader active = {this.state.loading}/>
+            <div className="music-player-container">
+              <Header style={{fontSize: 30}}>
+                What's on your mind right now?
+              </Header>
+            </div>
+            <div className="paddingText">
+              <Form>
+                <TextArea
+                  rows={16}
+                  placeholder="Spill your heart out..."
+                  style={{ minHeight: 200 }}
+                  value={this.state.text}
+                  onChange={this.handleChange}
+                />
+              </Form>
+            </div>
+  
+            <Grid container stackable verticalAlign="middle">
+              <Grid.Row>
+                <Grid.Column textAlign="center">
+                  <Button size="huge" onClick={this.handleSubmit}>
+                    Submit daily entry
+                  </Button>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          {/* </Dimmer> */}
         </Segment>
 
-
-        <Segment style={{ padding: '0em' }} vertical id = "logs">
-          <Grid celled='internally' columns='equal' stackable>
-            <Grid.Row textAlign='center'>
-              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
-
-                <List>
+        <Segment style={{ padding: "0em" }} vertical id="logs">
+          <Grid celled="internally" columns="equal" stackable>
+            <Grid.Row textAlign="center">
+              <Grid.Column style={{ paddingBottom: "5em", paddingTop: "5em" }}>
+                <List animated>
                   {this.state.items.map(item => {
                     return (
-                      <List.Item key={item.id}>
-                        <Image avatar src = {tempImg} />
-                        <List.Content>
-                        <List.Header>{item.time}</List.Header>
-                        <List.Description>Mood found: {item.text}</List.Description>
-                        <br/>
-                        <Modal trigger={<Button>Show details</Button>}>
-                          <Modal.Header>
-                            Entry date and time: {item.time}
-                          </Modal.Header>
-                          <Modal.Content image scrolling>
-                            <Image
-                              size="medium"
-                              src="https://react.semantic-ui.com/images/wireframe/image.png"
-                              wrapped
-                            />
-
-                            <Modal.Description>
-                              <Header>Details</Header>
-                              <p>{item.text}</p>
-                            </Modal.Description>
-                          </Modal.Content>
-                          <Modal.Actions>
-                            <Button primary>
-                              Proceed <Icon name="chevron right" />
+                      // <div className="entry-container">
+                        <List.Item key={item.id}>
+                          {this.switchColors(item.moods)}
+                          <List.Content>
+                            <List.Header>{item.time}</List.Header>
+                            <List.Description>
+                              Mood found: {item.moods}
+                            </List.Description>
+                            <br />
+                            <Modal trigger={<Button>Show details</Button>}>
+                              <Modal.Header>
+                                <div className="modal-header-container">
+                                  <div>Entry</div>{" "}
+                                  <div>written on: {item.time}</div>
+                                </div>
+                              </Modal.Header>
+                              <Modal.Content>
+                                <Modal.Description>
+                                  <Header>
+                                    {" "}
+                                    Mood on this day: {item.moods}{" "}
+                                  </Header>
+                                </Modal.Description>
+                              </Modal.Content>
+  
+                              <Modal.Content image scrolling>
+                                <Modal.Description>
+                                  <Header>Details</Header>
+                                  <p>{item.text}</p>
+                                  <Header>Here are some songs you may like</Header>
+                                  <div className="music-player-container">
+                                    {this.musicPlayer(item.moods)}
+                                  </div>
+                                </Modal.Description>
+                              </Modal.Content>
+                              <Modal.Actions></Modal.Actions>
+                            </Modal>
+  
+                            <Button onClick={() => this.removeItem(item.id)}>
+                              Remove Item
                             </Button>
-                          </Modal.Actions>
-                        </Modal>
-
-                        <Button onClick={() => this.removeItem(item.id)}>Remove Item</Button>
-                        </List.Content>
-                        <br/>
-
-                      </List.Item>
+                          </List.Content>
+                          <br />
+                        </List.Item>
+                      // </div>
                     );
                   })}
                 </List>
@@ -377,8 +551,7 @@ class App extends Component {
           </Grid>
         </Segment>
 
-        <Segment inverted vertical style={{ padding: '5em 0em' }}>
-
+        <Segment inverted vertical style={{ padding: "5em 0em" }}>
           <Container>
             <Grid divided inverted stackable>
               <Grid.Row>

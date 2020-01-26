@@ -67,7 +67,7 @@ app.get("/api/greeting", (req, res) => {
       var query = db.orderByChild('uuid').equalTo(req.query.uuid);
 
       var pro = query.once('child_added', function(snapshot) {
-        snapshot.ref.update({ moods: arr });
+        snapshot.ref.update({ moods: arr[0]["tone_name"] });
       });
 
       pro.then(console.log("success"));
