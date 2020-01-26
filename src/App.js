@@ -214,7 +214,7 @@ class App extends Component {
       time: new Date().toLocaleString(),
       text: '',
       items: [],
-      moods: [{score: 0.0, tone_name:""}]
+      moods: [{score: 0.0, tone_name:"Unknown"}]
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -278,15 +278,16 @@ class App extends Component {
       time: this.state.time,
       text: this.state.text,
       moods: this.state.moods
-    }
+    };
     itemsRef.push(item);
+    fetch(`/api/greeting?uuid=${encodeURIComponent(this.state.uuid)}&text=${encodeURIComponent(this.state.text)}`)
+      .then(response => console.log(response)); //response.json()
     this.setState({
       uuid: uuidv1(),
       text: "",
       time: new Date().toLocaleString()
     });
-    fetch(`/api/greeting?uuid=${encodeURIComponent(this.state.uuid)}&text=${encodeURIComponent(this.state.text)}`)
-      .then(response => console.log(response)); //response.json()
+    
   }
 
   removeItem(itemId) {

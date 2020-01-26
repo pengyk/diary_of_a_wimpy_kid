@@ -1,7 +1,10 @@
 // const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const serviceAccount = require('/Users/hongkun/Projects/ConUHacks2020/diary_of_a_wimpy_kid/conuhack-bd4ec-firebase-adminsdk-emv9t-b9e1346851.json')
+
+// admin.initializeApp();
 admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://conuhack-bd4ec.firebaseio.com'
   });
 const express = require("express");
@@ -58,14 +61,18 @@ app.get("/api/greeting", (req, res) => {
         return b["score"] - a["score"];
       });
       // send relevant data to firebase
-      var db = admin.database().ref("items");
+      var db = admin.database().ref('items');
+      var test = "0";
 
-      var query = db
-        .orderByChild("uuid")
-        .equalTo(req.query.uuid);
-      query.once("child_added", function(snapshot) {
+      var query = db.orderByChild('uuid').equalTo(req.query.uuid);
+
+      var pro = query.once('child_added', function(snapshot) {
         snapshot.ref.update({ moods: arr });
       });
+
+      pro.then(console.log("success"));
+
+      console.log("COMPLETED DATABASE UPDATE");
     })
     .catch(err => {
       console.log("error:", err);
